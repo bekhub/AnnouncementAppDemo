@@ -1,0 +1,9 @@
+Уважаемый {{ author }}
+
+Вы получили новый комментарий на сайте "Объявления" на ваше объявление {{ comment.bb }} от {{ comment.author }}.
+Текст комментария:
+{{ comment.content }}
+Дата публикации: {{ comment.created_at }}
+Ваше объявление {{ host }}{% url 'main:profile_bb_detail' pk=comment.bb.pk %}
+
+С уважением, администрация сайта "Объявления".

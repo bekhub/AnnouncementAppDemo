@@ -1,0 +1,27 @@
+{% extends 'layout/basic.html'%}
+
+{% load bootstrap4 %}
+
+{% block title %}Удаление пользователя{% endblock %}
+
+{% block body %}
+    <h2 class="text-center mb-5">Удаление пользователя {{ object.username }}</h2>
+    <div class="row">
+        <div class="col item"></div>
+
+        <div class="col item">
+            <div class="card bg-warning">
+                <div class="card-body">
+                    <p>Вы правда хотите удалить аккаунт пользователя {{ object.username }}?</p>
+                    <form method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger btn-block">Да, удалить</button>
+                        <a href="{% url 'main:account' %}" class="btn btn-secondary btn-block">Отмена</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col item"></div>
+    </div>
+{% endblock %}

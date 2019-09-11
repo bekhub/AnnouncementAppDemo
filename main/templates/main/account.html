@@ -1,0 +1,88 @@
+{% extends 'layout/basic.html' %}
+
+{% block title %}Аккаунт{% endblock %}
+
+{% load bootstrap4 %}
+
+{% block body %}
+    {% if user.is_authenticated %}
+
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+            <div class="card bg-light border-warning">
+                <div class="card-header bg-warning">
+                    <h4 class="text-center text-dark mt-2">Аккаунт пользователя <span class="text-info"><i>{{ user.username }}</i></span></h4>
+                </div>
+                <div class="card-body text-dark">
+                    <div class="row">
+                        <div class="col item">
+                            <p>Пользователь: </p>
+                            <hr>
+                            <p>Эл. почта: </p>
+                            <hr>
+                            {% if user.first_name %}
+                                <p>Имя: </p>
+                                <hr>
+                            {% endif %}
+                            {% if user.last_name %}
+                                <p>Фамилия: </p>
+                                <hr>
+                            {% endif %}
+                            <p>Сообщения о новых комментариях на почту: </p>
+                            <hr>
+                        </div>
+                        <div class="col item">
+                            <p>{{ user.username }}</p>
+                            <hr>
+                            <p>{{ user.email }}</p>
+                            <hr>
+                            <p>{{ user.first_name }}</p>
+                            {% if user.first_name %}
+                            <hr>
+                            {% endif %}
+                            <p>{{ user.last_name }}</p>
+                            {% if user.last_name %}
+                            <hr>
+                            {% endif %}
+                            <br>
+                            {% if user.send_messages %}
+                                <p>Вкл.</p>
+                                <hr>
+                            {% else %}
+                                <p>Откл.</p>
+                                <hr>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-1"></div>
+                        <div class="col-10">
+                            <a class="btn btn-outline-primary btn-block" href="{% url 'main:profile_change' %}">Изменить данные</a>
+                            <a class="btn btn-outline-primary btn-block" href="{% url 'main:password_change' %}">Сменить пароль</a>
+                            <a class="btn btn-outline-danger btn-block" href="{% url 'main:profile_delete' %}">Удалить аккаунт</a>
+                        </div>
+                        <div class="col-1"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3"></div>
+    </div>
+    {% else %}
+        <div class="row">
+            <div class="col item"></div>
+
+            <div class="col item">
+                <div class="card bg-info">
+                    <div class="card-body">
+                        <p class="text-center text-white">Ай-ай-ай эту страницу вы видеть не должны</p>
+                        <h1 class="text-center mt-5"><a class="btn btn-primary btn-block" href="{% url 'main:login' %}">Вход</a></h1>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col item"></div>
+        </div>
+    {% endif %}
+{% endblock %}

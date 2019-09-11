@@ -1,0 +1,39 @@
+{% extends 'layout/basic.html' %}
+
+{% load bootstrap4 %}
+
+{% block title %}Вход{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4"></div>
+
+            <div class="col-md-4">
+                <div class="card bg-light border-warning">
+                    <div class="card-header bg-warning">
+                        <h4 class="text-center mt-2">Вход</h4>
+                    </div>
+                    <div class="card-body">
+                        {% if user.is_authenticated %}
+                            <p>Вы уже выполнили вход.</p>
+                        {% else %}
+                        <form class="form-signin" method="post">
+                        {% csrf_token %}
+                            {% bootstrap_form form layout='inline' %}
+                            <input type="hidden" name="next" value="{{ next }}">
+                            <div class="text-center mt-4 mb-2">
+                                <button class="btn btn-primary btn-block">Войти</button>
+                                <p class="text-center mt-3">или</p>
+                                <a class="btn btn-success btn-block" href="{% url 'main:register' %}">Зарегистрироваться</a>
+                            </div>
+                        </form>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4"></div>
+        </div>
+    </div>
+{% endblock %}

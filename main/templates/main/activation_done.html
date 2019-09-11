@@ -1,0 +1,11 @@
+{% extends 'layout/basic.html' %}
+
+{% block title %}Активация выполнена{% endblock %}
+
+{% load bootstrap4 %}
+
+{% block body %}
+    <h2 class="text-center mb-5">Активация</h2>
+    <p class="text-center">Пользователь {{ user.username }} успешно активирован.</p>
+    <p class="text-center"><a href="{% url 'main:login' %}">Войти на сайт</a></p>
+{% endblock %}

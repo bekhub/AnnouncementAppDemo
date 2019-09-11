@@ -1,0 +1,29 @@
+{% extends 'layout/basic.html' %}
+
+{% load bootstrap4 %}
+
+{% block title %}Добавление объявления{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col"></div>
+
+        <div class="col-md-6">
+            <div class="card bg-light border-warning">
+                <div class="card-header bg-warning">
+                    <h4 class="text-center mt-2">Добавление объявления</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {% bootstrap_form form layout='vertical' %}
+                        {% bootstrap_formset formset layout='vertical' %}
+                        {% buttons submit='Добавить' %}{% endbuttons %}
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col"></div>
+    </div>
+{% endblock %}

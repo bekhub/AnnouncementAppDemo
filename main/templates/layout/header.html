@@ -1,0 +1,66 @@
+{% load static %}
+<header>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand btn btn-warning text-dark" href="{% url 'main:index' %}">
+          <img src="{% static 'main/img/index.png' %}" width="30" height="30" class="d-inline-block align-top" alt="">
+          Объявления
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'main:index' %}">Главная</a>
+          </li>
+            <li>
+                <a class="nav-link root" href="{% url 'main:other' page='about' %}">О сайте</a>
+            </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Рубрики
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <div class="accordion">
+                    {% for rubric in rubrics %}
+                    {% ifchanged rubric.super_rubric.pk %}
+                    <button class="dropdown-item font-weight-bold">{{ rubric.super_rubric.name }}</button>
+                    {% endifchanged %}
+                    <a class="dropdown-item" href="{% url 'main:by_rubric' pk=rubric.pk %}">{{ rubric.name }}</a>
+                    {% endfor %}
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#">Все рубрики</a>
+                </div>
+            </div>
+          </li>
+        </ul>
+        <ul class="navbar-nav mr-2">
+            {% if user.is_authenticated %}
+
+            <li class="nav-item">
+                <a href="{% url 'main:profile_bb_add' %}" class="btn btn-primary">Добавить объявление</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {{ user.username }}
+                </a>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="{% url 'main:account' %}">Аккаунт</a>
+                    <a class="dropdown-item" href="{% url 'main:profile' %}">Мои объявления</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="{% url 'main:logout' %}">Выйти</a>
+                </div>
+            </li>
+            {% else %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'main:register' %}">Регистрация</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'main:login' %}">Вход</a>
+            </li>
+            {% endif %}
+        </ul>
+      </div>
+    </nav>
+</header>
