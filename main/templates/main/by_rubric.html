@@ -3,6 +3,7 @@
 {% load thumbnail %}
 {% load static %}
 {% load bootstrap4 %}
+{% load filters %}
 
 {% block title %}{{ rubric }}{% endblock %}
 
@@ -10,37 +11,53 @@
 {% endblock %}
 
 {% block body %}
-    <h2 class="mb-5">{{ rubric }}</h2>
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'main:index' %}">Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ rubric.super_rubric }}</li>
+        <li class="breadcrumb-item active" aria-current="page">{{ rubric.name }}</li>
+      </ol>
+    </nav>
+{#    <h2 class="mb-5">{{ rubric }}</h2>#}
     <div class="container-fluid mb-2">
         <div class="row">
-            <div class="col">&nbsp;</div>
+            <div class="col-md-4">&nbsp;</div>
             <form class="col-md-auto form-inline">
-                {% bootstrap_form form show_label=False %}
-                {% bootstrap_button content='Поиск' button_type='submit' %}
+                <div class="form-group row">
+                    <div class="col">{% bootstrap_form form show_label=False %}</div>
+                    <div class="col">{% bootstrap_button content='Поиск' button_type='submit' %}</div>
+                </div>
             </form>
+            <div class="col-md-4"></div>
         </div>
     </div>
     {% if bbs %}
-        <ul class="list-unstyled">
-        {% for bb in bbs %}
-            <li class="media my-5 p-3 border">
-                {% url 'main:detail' rubric_pk=rubric.pk pk=bb.pk as url %}
-                <a href="{{ url }}{{ all }}">
-                {% if bb.image %}
-                    <img src="{% thumbnail bb.image 'default' %}" alt="Image" class="mr-3">
-                {% else %}
-                    <img src="{% static 'main/img/empty.jpg' %}" alt="" class="mr-3">
-                {% endif %}
-                </a>
-                <div class="media-body">
-                    <h3><a href="{{ url }}{{ all }}">{{ bb.title }}</a></h3>
-                    <div>{{ bb.content }}</div>
-                    <p class="text-right font-weight-bold">{{ bb.price }}</p>
-                    <p class="text-right font-italic">{{ bb.created_at }}</p>
-                </div>
-            </li>
-        {% endfor %}
-        </ul>
-        {% bootstrap_pagination page url=keyword %}
-    {% endif %}
+            <div class="row">
+                {% for bb in bbs %}
+                    {% url 'main:detail' rubric_pk=bb.rubric.pk pk=bb.pk as url %}
+                    <div class="col-md-4 mt-5">
+                        <div class="card border-warning mb-5" style="width: 18rem;">
+                            <a href="{{ url }}{{ all }}">
+                                {% if bb.image %}
+                                    <img src="{% thumbnail bb.image 'default' %}" class="card-img-top" alt="...">
+                                {% else %}
+                                    <img src="{% static 'main/img/empty.jpg' %}" alt="" class="card-img-top">
+                                {% endif %}
+                                <div class="card-body">
+                                    <h5 class="card-title"><a href="{{ url }}{{ all }}">{{ bb.title }}</a></h5>
+                                    <a href="{% url 'main:by_rubric' pk=bb.rubric.pk %}" class="badge badge-pill badge-warning mb-3">{{ bb.rubric.name }}</a>
+                                    <span class="badge badge-pill badge-success mb-3">Цена: {{ bb.price|currency:'$' }}</span>
+                                    <p class="card-text">{{ bb.content|truncatechars:100 }}</p>
+                                    <a href="{{ url }}{{ all }}" class="btn btn-primary btn-block">Смотреть</a>
+                                </div>
+                                <div class="card-footer text-muted">{{ bb.created_at|timesince }}</div>
+                            </a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            {% bootstrap_pagination page url=keyword %}
+        {% else %}
+            <h3 class="text-center mt-5 mb-5">К сожалению в данной рубрике нет ни одного объявления:(</h3>
+        {% endif %}
 {% endblock %}

@@ -3,31 +3,55 @@
 {% load thumbnail %}
 {% load static %}
 {% load bootstrap4 %}
+{% load filters %}
 
 {% block body %}
-    <h2 class="text-center">Главная</h2>
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item active" aria-current="page">Home</li>
+      </ol>
+    </nav>
+    <h2 class="text-center mt-5">Все рубрики</h2>
+    <div class="container mt-5 mb-5">
+        {% if rubrics %}
+            <div class="row">
+                {% for rubric in rubrics %}
+                    <div class="col-md-2 item">
+                        <div class="card bg-warning mb-4">
+                            <a href="{% url 'main:by_rubric' pk=rubric.pk %}" class="btn btn-warning text-center font-weight-bold">{{ rubric.name }}</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+    <h2 class="text-center">Все объявления</h2>
     <div class="container mt-5 mb-5">
         {% if bbs %}
-            <ul class="list-unstyled">
-            {% for bb in bbs %}
-                <li class="media my-5 p-3 border">
+            <div class="row">
+                {% for bb in bbs %}
                     {% url 'main:detail' rubric_pk=bb.rubric.pk pk=bb.pk as url %}
-                    <a href="{{ url }}{{ all }}">
-                    {% if bb.image %}
-                        <img src="{% thumbnail bb.image 'default' %}" alt="Image" class="mr-3">
-                    {% else %}
-                        <img src="{% static 'main/img/empty.jpg' %}" alt="" class="mr-3">
-                    {% endif %}
-                    </a>
-                    <div class="media-body">
-                        <h3><a href="{{ url }}{{ all }}">{{ bb.title }}</a></h3>
-                        <div>{{ bb.content }}</div>
-                        <p class="text-right font-weight-bold">{{ bb.price }}</p>
-                        <p class="text-right font-italic">{{ bb.created_at }}</p>
+                    <div class="col-md-4 mt-5">
+                        <div class="card border-warning mb-2" style="width: 18rem;">
+                            <a href="{{ url }}{{ all }}">
+                                {% if bb.image %}
+                                    <img src="{% thumbnail bb.image 'default' %}" class="card-img-top" alt="...">
+                                {% else %}
+                                    <img src="{% static 'main/img/empty.jpg' %}" alt="" class="card-img-top">
+                                {% endif %}
+                                <div class="card-body">
+                                    <h5 class="card-title"><a href="{{ url }}{{ all }}">{{ bb.title }}</a></h5>
+                                    <a href="{% url 'main:by_rubric' pk=bb.rubric.pk %}" class="badge badge-pill badge-warning mb-3">{{ bb.rubric.name }}</a>
+                                    <span class="badge badge-pill badge-success mb-3">Цена: {{ bb.price|currency:'$' }}</span>
+                                    <p class="card-text">{{ bb.content|truncatechars:100 }}</p>
+                                    <a href="{{ url }}{{ all }}" class="btn btn-primary btn-block">Смотреть</a>
+                                </div>
+                                <div class="card-footer text-muted">{{ bb.created_at|timesince }}</div>
+                            </a>
+                        </div>
                     </div>
-                </li>
-            {% endfor %}
-            </ul>
+                {% endfor %}
+            </div>
 {#            {% bootstrap_pagination page url=keyword %}#}
         {% endif %}
     </div>

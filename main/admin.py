@@ -83,7 +83,13 @@ class BbAdmin(admin.ModelAdmin):
     inlines = (AdditionalImageInline, CommentInline)
 
 
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ('bb', 'author', 'content', 'created_at')
+    list_filter = ('bb', 'author', 'created_at')
+
+
 admin.site.register(Bb, BbAdmin)
 admin.site.register(SubRubric, SubRubricAdmin)
 admin.site.register(SuperRubric, SuperRubricAdmin)
 admin.site.register(AdvUser, AdvUserAdmin)
+admin.site.register(Comment, CommentAdmin)

@@ -75,6 +75,9 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'main.middlewares.bboard_context_processor',
             ],
+            'libraries': {
+                'filters': 'main.filters',
+            }
         },
     },
 ]
@@ -131,7 +134,7 @@ MEDIA_URL = '/media/'
 THUMBNAIL_ALIASES = {
     '': {
         'default': {
-            'size': (96, 96),
+            'size': (196, 196),
             'crop': 'scale'
         }
     }

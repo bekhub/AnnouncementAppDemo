@@ -53,7 +53,7 @@ class SubRubric(Rubric):
     objects = SubRubricManager()
 
     def __str__(self):
-        return '%s/%s' % (self.super_rubric.name, self.name)
+        return '%s / %s' % (self.super_rubric.name, self.name)
 
     class Meta:
         proxy = True
@@ -77,6 +77,9 @@ class Bb(models.Model):
         for ai in self.additionalimage_set.all():
             ai.delete()
         super().delete(*args, **kwargs)
+
+    def __str__(self):
+        return self.title
 
     class Meta:
         verbose_name_plural = 'Объявления'
@@ -109,17 +112,17 @@ class Comment(models.Model):
 user_registrated = Signal(providing_args=['instance'])
 
 
-def user_registrated_dispatcher(sender, **kwargs):
-    send_activation_notification(kwargs['instance'])
+# def user_registrated_dispatcher(sender, **kwargs):
+#     send_activation_notification(kwargs['instance'])
 
 
-user_registrated.connect(user_registrated_dispatcher)
+# user_registrated.connect(user_registrated_dispatcher)
 
 
-def post_save_dispatcher(sender, **kwargs):
-    author = kwargs['instance'].bb.author
-    if kwargs['created'] and author.send_messages:
-        send_new_comment_notification(kwargs['instance'])
-
-
-post_save.connect(post_save_dispatcher, sender=Comment)
+# def post_save_dispatcher(sender, **kwargs):
+#     author = kwargs['instance'].bb.author
+#     if kwargs['created'] and author.send_messages:
+#         send_new_comment_notification(kwargs['instance'])
+#
+#
+# post_save.connect(post_save_dispatcher, sender=Comment)
